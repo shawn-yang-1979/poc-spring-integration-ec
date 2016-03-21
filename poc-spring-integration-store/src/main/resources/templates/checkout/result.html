@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Order Result</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Order Result</h1>
+	<p th:text="'Order Number: ' + ${order.number}" />
+	<a href="/checkout">Another order</a>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	<property name="BASE_LOG_PATH" value="/data/store/log/"/>
+	<property name="BOOT_LOG_FILE" value="boot.log" />
+	<appender name="BOOT_APPENDER"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+		</encoder>
+		<file>${BASE_LOG_PATH}${BOOT_LOG_FILE}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>${BASE_LOG_PATH}${BOOT_LOG_FILE}.%i</fileNamePattern>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10MB</MaxFileSize>
+		</triggeringPolicy>
+	</appender>
+	<logger name="com.shawnyang.poc.spring.integration.store.BootApplication"
+		level="DEBUG">
+		<appender-ref ref="BOOT_APPENDER" />
+	</logger>
+	<property name="DAO_LOG_FILE" value="dao.log" />
+	<appender name="DAO_APPENDER"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+		</encoder>
+		<file>${BASE_LOG_PATH}${DAO_LOG_FILE}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>${BASE_LOG_PATH}${DAO_LOG_FILE}.%i</fileNamePattern>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10MB</MaxFileSize>
+		</triggeringPolicy>
+	</appender>
+	<logger name="com.shawnyang.poc.spring.integration.store.dao"
+		level="DEBUG">
+		<appender-ref ref="DAO_APPENDER" />
+	</logger>
+</configuration>

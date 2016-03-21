@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Shopping Cart</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>My Shopping Cart</h1>
+    <form action="#" th:action="@{/checkout}" th:object="${orderForm}" method="post">
+    	<p>Customer: <input type="text" th:field="*{customer}" /></p>
+        <p>QTY: <input type="text" th:field="*{qty}" /></p>
+        <p>Comment: <input type="text" th:field="*{comment}" /></p>
+        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+    </form>
+</body>
+</html>

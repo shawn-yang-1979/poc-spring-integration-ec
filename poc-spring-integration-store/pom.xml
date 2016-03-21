@@ -4,12 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.shawnyang.poc.spring.integration</groupId>
-	<artifactId>spring-integration-poc</artifactId>
+	<artifactId>poc-spring-integration-store</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
-
-	<name>spring-integration-poc</name>
-	<description>Demo project for Spring Integration</description>
+	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -24,13 +21,9 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-integration</artifactId>
-		</dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -43,7 +36,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -52,6 +45,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	
 
 </project>
