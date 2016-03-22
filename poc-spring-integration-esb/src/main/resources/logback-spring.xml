@@ -1,61 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<include resource="org/springframework/boot/logging/logback/base.xml" />
-	<property name="LOG_FILE_BOOT" value="/data/log/boot.log" />
-	<appender name="FILE_BOOT"
+	<property name="BASE_LOG_PATH" value="/data/esb/log/"/>
+	<property name="BOOT_LOG_FILE" value="boot.log" />
+	<appender name="BOOT_APPENDER"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder>
 			<pattern>${FILE_LOG_PATTERN}</pattern>
 		</encoder>
-		<file>${LOG_FILE_BOOT}</file>
+		<file>${BASE_LOG_PATH}${BOOT_LOG_FILE}</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<fileNamePattern>${LOG_FILE_BOOT}.%i</fileNamePattern>
+			<fileNamePattern>${BASE_LOG_PATH}${BOOT_LOG_FILE}.%i</fileNamePattern>
 		</rollingPolicy>
 		<triggeringPolicy
 			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
 			<MaxFileSize>10MB</MaxFileSize>
 		</triggeringPolicy>
 	</appender>
-	<logger name="com.shawnyang.poc.spring.integration.BootApplication"
+	<logger name="com.shawnyang.poc.spring.integration.esb.BootApplication"
 		level="DEBUG">
-		<appender-ref ref="FILE_BOOT" />
+		<appender-ref ref="BOOT_APPENDER" />
 	</logger>
-	<property name="LOG_FILE_ENDPOINT" value="/data/log/endpoint.log" />
-	<appender name="FILE_ENDPOINT"
+	<property name="CHANNEL_LOG_FILE" value="channel.log" />
+	<appender name="CHANNEL_APPENDER"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<encoder>
 			<pattern>${FILE_LOG_PATTERN}</pattern>
 		</encoder>
-		<file>${LOG_FILE_ENDPOINT}</file>
+		<file>${BASE_LOG_PATH}${CHANNEL_LOG_FILE}</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<fileNamePattern>${LOG_FILE_ENDPOINT}.%i</fileNamePattern>
+			<fileNamePattern>${BASE_LOG_PATH}${CHANNEL_LOG_FILE}.%i</fileNamePattern>
 		</rollingPolicy>
 		<triggeringPolicy
 			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
 			<MaxFileSize>10MB</MaxFileSize>
 		</triggeringPolicy>
 	</appender>
-	<logger name="com.shawnyang.poc.spring.integration.endpoint"
+	<logger name="com.shawnyang.poc.spring.integration.esb.channel"
 		level="DEBUG">
-		<appender-ref ref="FILE_ENDPOINT" />
+		<appender-ref ref="CHANNEL_APPENDER" />
 	</logger>
-	<property name="LOG_FILE_CHANNEL" value="/data/log/channel.log" />
-	<appender name="FILE_CHANNEL"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<encoder>
-			<pattern>${FILE_LOG_PATTERN}</pattern>
-		</encoder>
-		<file>${LOG_FILE_CHANNEL}</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<fileNamePattern>${LOG_FILE_CHANNEL}.%i</fileNamePattern>
-		</rollingPolicy>
-		<triggeringPolicy
-			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>10MB</MaxFileSize>
-		</triggeringPolicy>
-	</appender>
-	<logger name="com.shawnyang.poc.spring.integration.channel"
-		level="DEBUG">
-		<appender-ref ref="FILE_CHANNEL" />
-	</logger>
+	
 </configuration>

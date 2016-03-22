@@ -16,7 +16,7 @@ public class OrderDao {
 		log.debug(form);
 
 		RestTemplate restTemplate = new RestTemplate();
-		Order order = restTemplate.postForObject("http://localhost:8082/order", form, Order.class);
+		Order order = restTemplate.postForObject("http://localhost:8080/order", form, Order.class);
 
 		log.debug(order);
 		return order;
