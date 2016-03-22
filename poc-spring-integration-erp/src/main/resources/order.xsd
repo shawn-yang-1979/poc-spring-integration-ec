@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://erp.integration.spring.poc.shawnyang.com/order"
+	xmlns:tns="http://erp.integration.spring.poc.shawnyang.com/order"
+	elementFormDefault="qualified">
+
+	<element name="postOrderRequest">
+		<complexType>
+			<sequence>
+				<element
+					name="order"
+					type="tns:order" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="postOrderResponse">
+		<complexType>
+			<sequence>
+				<element
+					name="status"
+					type="tns:status" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="order">
+		<sequence>
+			<element
+				type="string"
+				name="number" />
+			<element
+				type="string"
+				name="customer" />
+			<element
+				type="string"
+				name="comment" />
+			<element
+				type="tns:orderItem"
+				name="orderItem"
+				maxOccurs="unbounded"
+				minOccurs="0" />
+		</sequence>
+	</complexType>
+
+    <complexType name="orderItem">
+    	<sequence>
+    		<element
+    			name="number"
+    			type="int">
+    		</element>
+    	</sequence>
+    </complexType>
+    
+    <simpleType name="status">
+    	<restriction base="string">
+    		<enumeration value="OK"></enumeration>
+    		<enumeration value="ERROR"></enumeration>
+    	</restriction>
+    </simpleType>
+
+</schema>
