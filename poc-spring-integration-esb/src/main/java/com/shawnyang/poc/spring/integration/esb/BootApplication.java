@@ -1,4 +1,4 @@
-package com.shawnyang.poc.spring.integration;
+package com.shawnyang.poc.spring.integration.esb;
 
 import java.util.Arrays;
 

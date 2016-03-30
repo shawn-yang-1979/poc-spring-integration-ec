@@ -61,8 +61,8 @@ public class ApplicationTests {
 		order.setNumber(UUID.randomUUID().toString());
 		order.setCustomer("Shawn");
 		order.setComment("Hi");
-		order.getOrderItem().add(item1);
-		order.getOrderItem().add(item2);
+		order.getItem().add(item1);
+		order.getItem().add(item2);
 		PostOrderRequest request = new PostOrderRequest();
 		request.setOrder(order);
 

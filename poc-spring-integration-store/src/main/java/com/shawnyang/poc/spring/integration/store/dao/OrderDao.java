@@ -13,12 +13,12 @@ public class OrderDao {
 	private Log log = LogFactory.getLog(OrderDao.class);
 
 	public Order createOrder(OrderForm form) {
+
 		log.debug(form);
-
 		RestTemplate restTemplate = new RestTemplate();
-		Order order = restTemplate.postForObject("http://localhost:8080/order", form, Order.class);
-
+		Order order = restTemplate.postForObject("http://localhost:8080/onlineStore/order", form, Order.class);
 		log.debug(order);
+
 		return order;
 	}
 

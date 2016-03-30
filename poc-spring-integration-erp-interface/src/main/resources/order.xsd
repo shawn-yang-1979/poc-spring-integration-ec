@@ -38,7 +38,7 @@
 				name="comment" />
 			<element
 				type="tns:orderItem"
-				name="orderItem"
+				name="item"
 				maxOccurs="unbounded"
 				minOccurs="0" />
 		</sequence>
