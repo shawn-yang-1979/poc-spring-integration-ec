@@ -30,7 +30,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!-- To codegen JAXB POJO from XML schema when maven build -->
+			<!-- To generate domain classes based on an XML schema -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
@@ -49,7 +49,7 @@
 					<clearOutputDir>true</clearOutputDir>
 				</configuration>
 			</plugin>
-			<!-- To codegen JAXB POJO from XML schema when maven build -->			
+			<!-- To generate domain classes based on an XML schema -->			
 		</plugins>
 	</build>
 	

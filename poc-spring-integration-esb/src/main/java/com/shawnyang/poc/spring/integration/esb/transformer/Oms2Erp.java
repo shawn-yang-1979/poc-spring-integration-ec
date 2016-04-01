@@ -3,8 +3,8 @@ package com.shawnyang.poc.spring.integration.esb.transformer;
 import org.springframework.integration.annotation.Transformer;
 
 import com.google.gson.Gson;
-import com.shawnyang.poc.spring.integration.erp.order.Order;
-import com.shawnyang.poc.spring.integration.erp.order.PostOrderRequest;
+import com.shawnyang.poc.spring.integration.erp.Order;
+import com.shawnyang.poc.spring.integration.erp.PostOrderRequest;
 
 public class Oms2Erp {
 

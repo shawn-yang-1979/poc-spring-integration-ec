@@ -31,9 +31,9 @@ import org.springframework.util.ClassUtils;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
 import com.shawnyang.poc.spring.integration.erp.BootApplication;
-import com.shawnyang.poc.spring.integration.erp.order.Order;
-import com.shawnyang.poc.spring.integration.erp.order.OrderItem;
-import com.shawnyang.poc.spring.integration.erp.order.PostOrderRequest;
+import com.shawnyang.poc.spring.integration.erp.Order;
+import com.shawnyang.poc.spring.integration.erp.OrderItem;
+import com.shawnyang.poc.spring.integration.erp.PostOrderRequest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BootApplication.class)

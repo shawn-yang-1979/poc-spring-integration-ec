@@ -8,7 +8,7 @@ public class Erp2Oms {
 
 	@Transformer
 	public ResponseStatus transform(
-			com.shawnyang.poc.spring.integration.erp.order.PostOrderResponse postOrderResponse) {
+			com.shawnyang.poc.spring.integration.erp.PostOrderResponse postOrderResponse) {
 
 		ResponseStatus result = new ResponseStatus();
 		result.setStatus(postOrderResponse.getStatus().toString());
