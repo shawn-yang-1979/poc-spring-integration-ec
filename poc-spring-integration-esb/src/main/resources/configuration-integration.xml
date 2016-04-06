@@ -17,26 +17,27 @@
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd
 		http://www.springframework.org/schema/integration/ws http://www.springframework.org/schema/integration/ws/spring-integration-ws-4.2.xsd">
-
 	<int:annotation-config />
+
+
+
+
 
 	<!--                    -> transform ->                         -->
 	<!-- Online Store Order                 Order Management System -->
 	<!--                    <- transform <-                         -->
 	<int-http:inbound-gateway
-		id="onlineStoreIn"
 		supported-methods="POST"
 		path="/onlineStore/order"
 		request-payload-type="com.shawnyang.poc.spring.integration.store.i.OrderForm"
-		request-channel="onlineStoreRequest"
-		reply-channel="onlineStoreReply">
+		request-channel="store2OmsStoreOrderIn"
+		reply-channel="store2OmsStoreOrderOut">
 	</int-http:inbound-gateway>
-	<int:channel id="onlineStoreRequest" />
-	<int:channel id="onlineStoreReply" />
+	<int:channel id="store2OmsStoreOrderIn" />
 	<int:chain
-		input-channel="onlineStoreRequest"
-		output-channel="omsOutRequest">
-		<int:transformer method="transform">
+		input-channel="store2OmsStoreOrderIn"
+		output-channel="store2OmsOmsOrderOut">
+		<int:transformer>
 			<bean
 				class="com.shawnyang.poc.spring.integration.esb.transformer.OnlineStore2Oms" />
 		</int:transformer>
@@ -46,71 +47,75 @@
 				value="eStore.htc.com" />
 		</int:enricher>
 	</int:chain>
-	<int:transformer
-		method="transform"
-		input-channel="omsOutReply"
-		output-channel="onlineStoreReply">
-		<bean
-			class="com.shawnyang.poc.spring.integration.esb.transformer.Oms2OnlineStore" />
-	</int:transformer>
-	<int:channel id="omsOutRequest" />
-	<int:channel id="omsOutReply" />
+	<int:channel id="store2OmsOmsOrderOut" />
 	<int-http:outbound-gateway
 		id="omsOut"
 		http-method="POST"
 		url="http://localhost:8082/order"
 		reply-timeout="5000"
 		expected-response-type="com.shawnyang.poc.spring.integration.oms.i.Order"
-		request-channel="omsOutRequest"
-		reply-channel="omsOutReply">
+		request-channel="store2OmsOmsOrderOut"
+		reply-channel="store2OmsOmsOrderIn">
 	</int-http:outbound-gateway>
+	<int:channel id="store2OmsOmsOrderIn" />
+	<int:transformer
+		input-channel="store2OmsOmsOrderIn"
+		output-channel="store2OmsStoreOrderOut">
+		<bean
+			class="com.shawnyang.poc.spring.integration.esb.transformer.Oms2OnlineStore" />
+	</int:transformer>
+	<int:channel id="store2OmsStoreOrderOut" />
 	<!--                    -> transform ->                         -->
 	<!-- Online Store Order                 Order Management System -->
 	<!--                    <- transform <-                         -->
 	
+	
+	
+	
+		
 	<!--                         -> transform ->     -->
 	<!-- Order Management System                 ERP -->
 	<!--                         <- transform <-     -->
 	<int-http:inbound-gateway
-		id="omsIn"
 		supported-methods="POST"
 		path="/erp/order"
 		request-payload-type="com.shawnyang.poc.spring.integration.oms.i.Order"
-		request-channel="omsInRequest"
-		reply-channel="omsInReply">
+		request-channel="oms2ErpOmsOrderIn"
+		reply-channel="oms2ErpOmsOrderOut">
 	</int-http:inbound-gateway>
-	<int:channel id="omsInRequest" />
-	<int:channel id="omsInReply" />
+	<int:channel id="oms2ErpOmsOrderIn" />
 	<int:transformer
-		method="transform"
-		input-channel="omsInRequest"
-		output-channel="erpOutRequest">
+		input-channel="oms2ErpOmsOrderIn"
+		output-channel="oms2ErpErpOrderOut">
 		<bean class="com.shawnyang.poc.spring.integration.esb.transformer.Oms2Erp" />
 	</int:transformer>
-	<int:transformer
-		method="transform"
-		input-channel="erpOutReply"
-		output-channel="omsInReply">
-		<bean class="com.shawnyang.poc.spring.integration.esb.transformer.Erp2Oms" />
-	</int:transformer>
-	<int:channel id="erpOutRequest" />
-	<int:channel id="erpOutReply" />
+	<int:channel id="oms2ErpErpOrderOut" />
 	<int-ws:outbound-gateway
-		id="erpOut"
 		uri="http://localhost:8083/ws"
 		reply-timeout="5000"
-		request-channel="erpOutRequest"
-		reply-channel="erpOutReply"
-		marshaller="marshaller">
+		request-channel="oms2ErpErpOrderOut"
+		reply-channel="oms2ErpErpOrderIn"
+		marshaller="erpInterfaceMarshaller">
 	</int-ws:outbound-gateway>
 	<!-- To transform(marshal and un-marshal) data format between POJO and SOAP XML -->
 	<oxm:jaxb2-marshaller
-		id="marshaller"
-		context-path="com.shawnyang.poc.spring.integration.erp.order">
+		id="erpInterfaceMarshaller"
+		context-path="com.shawnyang.poc.spring.integration.erp">
 	</oxm:jaxb2-marshaller>
+	<int:channel id="oms2ErpErpOrderIn" />
+	<int:transformer
+		input-channel="oms2ErpErpOrderIn"
+		output-channel="oms2ErpOmsOrderOut">
+		<bean class="com.shawnyang.poc.spring.integration.esb.transformer.Erp2Oms" />
+	</int:transformer>
+	<int:channel id="oms2ErpOmsOrderOut" />	
 	<!--                         -> transform ->     -->
 	<!-- Order Management System                 ERP -->
 	<!--                         <- transform <-     -->
+
+
+
+
 
 	<!-- Payment data send to OMS via email -->
 	<!-- Knowledge of IMAP URL Schema                                                         -->
@@ -120,11 +125,11 @@
 	<!-- "subject matches '(?i).*TEST.*'", the (?i) means ignore case                         -->
 	<!-- For knowledge of regexr please visit: http://regexr.com/                             -->
 	<int-mail:inbound-channel-adapter
-		store-uri="${mail.oms.payment.uri}"
-		channel="paymentMailInRequest"
+		store-uri="${oms.payment.mail.uri}"
+		channel="mail2FileMailPaymentIn"
 		should-delete-messages="false"
 		auto-startup="true"
-		mail-filter-expression="${mail.oms.payment.filter}"
+		mail-filter-expression="${oms.payment.mail.filter}"
 		java-mail-properties="javaMailProperties"
 		max-fetch-size="10">
 		<int:poller fixed-rate="10000" />
@@ -132,10 +137,10 @@
 	<util:properties id="javaMailProperties">
 		<prop key="mail.debug">false</prop>
 	</util:properties>
-	<int:channel id="paymentMailInRequest" />
+	<int:channel id="mail2FileMailPaymentIn" />
 	<int:chain
-		input-channel="paymentMailInRequest"
-		output-channel="paymentFileOutRequest">
+		input-channel="mail2FileMailPaymentIn"
+		output-channel="mail2FileFilePaymentOut">
 		<int:transformer>
 			<bean
 				class="com.shawnyang.poc.spring.integration.esb.transformer.EmailTransformer" />
@@ -145,43 +150,43 @@
 				class="com.shawnyang.poc.spring.integration.esb.transformer.EmailSplitter" />
 		</int:splitter>
 	</int:chain>
-	<int:channel id="paymentFileOutRequest" />
+	<int:channel id="mail2FileFilePaymentOut" />
 	<int-file:outbound-channel-adapter
 		auto-create-directory="true"
-		channel="paymentFileOutRequest"
-		directory="${data.oms.payment.inbound}">
+		channel="mail2FileFilePaymentOut"
+		directory="${oms.payment.file.inbound}">
 	</int-file:outbound-channel-adapter>
 
 	<int-file:inbound-channel-adapter
-		directory="${data.oms.payment.inbound}"
+		directory="${oms.payment.file.inbound}"
 		filename-pattern="030030197*"
-		channel="paymentFileInRequest"
+		channel="file2OmsFilePaymentIn"
 		auto-startup="true"
 		prevent-duplicates="false">
 		<int:poller fixed-rate="10000" />
 	</int-file:inbound-channel-adapter>
-	<int:channel id="paymentFileInRequest"></int:channel>
+	<int:channel id="file2OmsFilePaymentIn"></int:channel>
 	<int-file:outbound-gateway
 		auto-create-directory="true"
 		delete-source-files="true"
-		directory="${data.oms.payment.processing}"
-		request-channel="paymentFileInRequest"
-		reply-channel="paymentFileProcessRequest"
+		directory="${oms.payment.file.processing}"
+		request-channel="file2OmsFilePaymentIn"
+		reply-channel="file2OmsFilePaymentProcess"
 		reply-timeout="5000">
 	</int-file:outbound-gateway>
-	<int:channel id="paymentFileProcessRequest"></int:channel>
+	<int:channel id="file2OmsFilePaymentProcess"></int:channel>
 	<int:chain
-		input-channel="paymentFileProcessRequest"
-		output-channel="paymentHttpOutRequest">
+		input-channel="file2OmsFilePaymentProcess"
+		output-channel="file2OmsOmsPaymentOut">
 		<int:transformer>
 			<bean
 				class="com.shawnyang.poc.spring.integration.esb.transformer.Payment2Oms" />
 		</int:transformer>
 		<int:object-to-json-transformer></int:object-to-json-transformer>
 	</int:chain>
-	<int:channel id="paymentHttpOutRequest"></int:channel>
+	<int:channel id="file2OmsOmsPaymentOut"></int:channel>
 	<int-http:outbound-channel-adapter
-		channel="paymentHttpOutRequest"
+		channel="file2OmsOmsPaymentOut"
 		http-method="POST"
 		url="http://localhost:8082/payment">
 	</int-http:outbound-channel-adapter>

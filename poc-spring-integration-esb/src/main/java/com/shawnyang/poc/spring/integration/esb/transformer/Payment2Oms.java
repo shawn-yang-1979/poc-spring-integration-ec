@@ -23,7 +23,7 @@ import com.shawnyang.poc.spring.integration.oms.i.PaymentDataBatch;
 
 public class Payment2Oms {
 
-	@Value("${data.oms.payment.done}")
+	@Value("${oms.payment.file.done}")
 	private String destDir;
 
 	@Transformer

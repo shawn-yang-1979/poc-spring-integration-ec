@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import com.shawnyang.poc.spring.integration.oms.i.Order;
 import com.shawnyang.poc.spring.integration.oms.i.OrderForm;
 import com.shawnyang.poc.spring.integration.oms.i.OrderItem;
-import com.shawnyang.poc.spring.integration.oms.i.ResponseStatus;
+import com.shawnyang.poc.spring.integration.oms.i.Response;
 
 @Repository
 public class OrderDao {
@@ -34,9 +34,12 @@ public class OrderDao {
 		RestTemplate restTemplate = new RestTemplate();
 
 		log.debug(order);
-		ResponseStatus result = restTemplate.postForObject("http://localhost:8080/erp/order", order,
-				ResponseStatus.class);
+		Response result = restTemplate.postForObject("http://localhost:8080/erp/order", order, Response.class);
 		log.debug(result);
+
+		if (result.getStatus().equals(Response.Status.ERROR)) {
+			throw new IllegalStateException(result.getMessage());
+		}
 
 		return order;
 	}
